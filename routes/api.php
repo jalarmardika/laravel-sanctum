@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,7 +20,29 @@ use App\Http\Controllers\CommentController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::any('/', function() {
+	return response()->json([
+		'success' => false,
+		'message' => 'User Unauthorized'
+	], 401);
+})->name('login');
 
-Route::get('posts', [PostController::class, 'index']);
-Route::get('posts/{post}', [PostController::class, 'show']);
+Route::post('register', [UserController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
+Route::middleware('auth:sanctum')->group(function() {
+	// Route::apiResource('posts', PostController::class);
+
+	Route::get('posts', [PostController::class, 'index']);
+	Route::get('posts/{post}', [PostController::class, 'show']);
+	Route::post('posts', [PostController::class, 'store']);
+	Route::put('posts/{id}', [PostController::class, 'update'])->middleware('post-owner');
+	Route::delete('posts/{id}', [PostController::class, 'destroy'])->middleware('post-owner');
+
+	Route::post('comments', [CommentController::class, 'store']);
+	Route::put('comments/{id}', [CommentController::class, 'update'])->middleware('comment-owner');
+	Route::delete('comments/{id}', [CommentController::class, 'destroy'])->middleware('comment-owner');
+
+	Route::get('profile', [UserController::class, 'profile']);
+	Route::get('logout', [AuthController::class, 'logout']);
+});
