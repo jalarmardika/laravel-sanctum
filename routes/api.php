@@ -33,11 +33,11 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function() {
 	// Route::apiResource('posts', PostController::class);
 
-	Route::get('posts', [PostController::class, 'index']);
-	Route::get('posts/{post}', [PostController::class, 'show']);
-	Route::post('posts', [PostController::class, 'store']);
-	Route::put('posts/{id}', [PostController::class, 'update'])->middleware('post-owner');
-	Route::delete('posts/{id}', [PostController::class, 'destroy'])->middleware('post-owner');
+	Route::get('posts', [PostController::class, 'index'])->middleware('ability:see-post');
+	Route::get('posts/{post}', [PostController::class, 'show'])->middleware('ability:see-post');
+	Route::post('posts', [PostController::class, 'store'])->middleware('ability:post-manipulation');
+	Route::put('posts/{id}', [PostController::class, 'update'])->middleware('ability:post-manipulation','post-owner');
+	Route::delete('posts/{id}', [PostController::class, 'destroy'])->middleware('ability:post-manipulation','post-owner');
 
 	Route::post('comments', [CommentController::class, 'store']);
 	Route::put('comments/{id}', [CommentController::class, 'update'])->middleware('comment-owner');

@@ -30,7 +30,6 @@ class PostResource extends JsonResource
             // cara 1
             // 'comments' => $this->whenLoaded('comments', function() {
             //     return collect($this->comments)->each(function($comment) {
-            //         $comment->created_at = date_format($comment->created_at, 'Y-m-d H:i:s');
             //         return $comment->load('commentator:id,name,email');
             //     });
             // }),

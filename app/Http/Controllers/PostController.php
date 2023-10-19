@@ -24,7 +24,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-    	$data = $post->load(['author:id,name,email','comments:id,post_id,content,user_id,created_at']);
+    	$data = $post->load(['author:id,name,email','comments:id,post_id,content,created_at,updated_at,user_id']);
     	return response()->json([
     		'success' => true,
     		'message' => 'Successful in getting post',

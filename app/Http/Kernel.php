@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'post-owner' => \App\Http\Middleware\PostOwner::class,
-        'comment-owner' => \App\Http\Middleware\CommentOwner::class
+        'comment-owner' => \App\Http\Middleware\CommentOwner::class,
+        'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class
     ];
 }

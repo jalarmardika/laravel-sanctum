@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Comment;
 
 class CommentOwner
 {
@@ -16,6 +17,15 @@ class CommentOwner
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        $currentUserId = auth()->user()->id;
+        $comment = Comment::find($request->id);
+
+        if ($comment == null) {
+            return response()->json(['message' => 'Comment Not Found'], 404);
+        } elseif ($currentUserId != $comment->user_id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        } else {
+            return $next($request);
+        }
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use App\Models\User;
+use App\Models\Role;
 
 class AuthController extends Controller
 {
@@ -34,10 +35,18 @@ class AuthController extends Controller
     	}
 
     	$data = User::where('email', $request->email)->first();
+        $roles = [];
+        foreach ($data->roles as $value) {
+            $roles[] = $value['name'];
+        }
+
+        if (empty($roles)) {
+            $roles = ["*"];
+        }
     	return Response::json([
     		'success' => true,
     		'message' => 'Login Successfully',
-    		'token' => $data->createToken('api-login')->plainTextToken
+    		'token' => $data->createToken('api-login', $roles)->plainTextToken
     	]);
     }
 
