@@ -12,9 +12,17 @@ class PostController extends Controller
 {
     public function index()
     {
-    	$posts = Post::with(['author:id,name,email','comments:id,post_id,content,created_at,updated_at,user_id'])
-    					->orderBy('id', 'desc')
-    					->get();
+    	$posts = Post::with(
+    		[
+    			'author:id,name,email',
+    			'comments' => function($query) {
+    				return $query->orderBy('id', 'desc')->pluck('id','post_id','content','created_at','updated_at','user_id');
+    			}
+    		]
+    	)
+		->orderBy('id', 'desc')
+		->get();
+
     	return response()->json([
     		'success' => true,
     		'message' => 'Successful in getting all the posts',
