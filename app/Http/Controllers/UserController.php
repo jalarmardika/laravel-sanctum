@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 
 class UserController extends Controller
@@ -36,12 +37,12 @@ class UserController extends Controller
     	return Response::json([
     		'success' => true,
     		'message' => 'Registration Successfully',
-    		'data' => $user
+    		'data' => new UserResource($user)
     	]);
     }
 
     public function profile()
     {
-    	return Response::json(Auth::user());
+    	return Response::json(new UserResource(Auth::user()));
     }
 }
